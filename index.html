@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TutorIA - Aprendizaje Guiado</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
 :root{
 --bg:#131314;
@@ -17,7 +15,12 @@
 --border:#333;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
 
 body{
 background:var(--bg);
@@ -40,12 +43,10 @@ background:rgba(30,31,32,0.9);
 backdrop-filter:blur(12px);
 padding:40px;
 border-radius:18px;
-width:380px;
+width:360px;
 text-align:center;
 border:1px solid #2c2c2c;
 }
-
-.card h2{margin-bottom:10px;}
 
 .card input{
 width:100%;
@@ -74,14 +75,18 @@ display:flex;
 height:100vh;
 }
 
+/* SIDEBAR */
 .sidebar{
-width:280px;
+width:260px;
 background:linear-gradient(180deg,#1e1f20,#151515);
 padding:20px;
 border-right:1px solid #2c2c2c;
 }
 
-.sidebar h3{color:var(--muted);margin-bottom:10px;}
+.sidebar h3{
+color:var(--muted);
+margin-bottom:10px;
+}
 
 .sidebar select,
 .sidebar button{
@@ -99,6 +104,7 @@ cursor:pointer;
 background:var(--accent);
 }
 
+/* CHAT */
 .content{
 flex:1;
 display:flex;
@@ -107,54 +113,73 @@ flex-direction:column;
 
 .chat{
 flex:1;
-padding:20px;
+padding:25px;
 overflow-y:auto;
 display:flex;
 flex-direction:column;
-gap:10px;
+gap:12px;
 }
 
 .msg{
-max-width:75%;
-padding:12px 14px;
-border-radius:12px;
+max-width:70%;
+padding:14px 16px;
+border-radius:16px;
 line-height:1.4;
-animation:fade 0.3s ease;
+font-size:15px;
+animation:fade 0.25s ease;
+word-wrap:break-word;
 }
 
 .user{
 align-self:flex-end;
-background:#2b2a2a;
+background:linear-gradient(135deg,#2b2a2a,#3a3a3a);
+border-bottom-right-radius:5px;
 }
 
 .ai{
 align-self:flex-start;
 background:#1e1f20;
 border:1px solid #333;
+border-bottom-left-radius:5px;
 }
 
+/* INPUT */
 .footer{
 display:flex;
-gap:10px;
+justify-content:center;
 padding:15px;
-border-top:1px solid #2c2c2c;
-background:#131314;
+background:transparent;
 }
 
-.footer input{
-flex:1;
-padding:12px;
-border-radius:10px;
-border:1px solid #333;
+.input-box{
+display:flex;
+align-items:center;
+gap:10px;
 background:#1e1f20;
-color:white;
+padding:10px 12px;
+border-radius:18px;
+width:90%;
+max-width:700px;
+border:1px solid #333;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
-.footer button{
-width:50px;
+.input-box input{
+flex:1;
 border:none;
-border-radius:10px;
-background:var(--accent);
+outline:none;
+background:transparent;
+color:white;
+font-size:15px;
+padding:10px;
+}
+
+.send-btn{
+width:42px;
+height:42px;
+border-radius:12px;
+border:none;
+background:linear-gradient(135deg,#744bfa,#5d36db);
 color:white;
 cursor:pointer;
 }
@@ -181,6 +206,7 @@ to{opacity:1;transform:translateY(0);}
 <!-- APP -->
 <div id="app" class="app" style="display:none;">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
 <h3>Materia</h3>
 
@@ -194,13 +220,16 @@ to{opacity:1;transform:translateY(0);}
 <button onclick="resetChat()">Reiniciar</button>
 </div>
 
+<!-- CHAT -->
 <div class="content">
 
 <div id="chat" class="chat"></div>
 
 <div class="footer">
-<input id="input" placeholder="Escribe tu pregunta">
-<button onclick="send()">➤</button>
+<div class="input-box">
+<input id="input" placeholder="Escribe tu pregunta...">
+<button class="send-btn" onclick="send()">➤</button>
+</div>
 </div>
 
 </div>
@@ -208,7 +237,7 @@ to{opacity:1;transform:translateY(0);}
 
 <script>
 
-/* DATA */
+/* BASE DE DATOS */
 const DB={
 math:{
 topic:"Álgebra",
@@ -238,7 +267,6 @@ exp:"Subject + Verb + Object"
 
 let user="";
 let step=1;
-let subject="math";
 
 /* LOGIN */
 function login(){
