@@ -3,191 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TutorIA - Aprendizaje Guiado</title>
+<title>TutorIA Real</title>
 
 <style>
-:root{
---bg:#131314;
---panel:#1e1f20;
---text:#e3e3e3;
---muted:#9aa0a6;
---accent:#744bfa;
---border:#333;
-}
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Segoe UI;
-}
-
 body{
-background:var(--bg);
-color:var(--text);
-height:100vh;
+margin:0;
+font-family:Segoe UI;
+background: radial-gradient(circle,#1a0b3d,#05060a);
+color:white;
 overflow:hidden;
 }
 
-/* LOGIN */
-.auth{
+.auth, .app{
+height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-background:radial-gradient(circle,#3b1b6b,#131314);
 }
 
 .card{
-background:rgba(30,31,32,0.9);
-backdrop-filter:blur(12px);
-padding:40px;
-border-radius:18px;
-width:360px;
+background:rgba(255,255,255,0.05);
+padding:30px;
+border-radius:15px;
+backdrop-filter:blur(15px);
+width:320px;
 text-align:center;
-border:1px solid #2c2c2c;
+border:1px solid rgba(255,255,255,0.1);
 }
 
-.card input{
-width:100%;
-padding:12px;
-margin-top:15px;
-border-radius:10px;
-border:1px solid #333;
-background:#131314;
-color:white;
-}
-
-.card button{
-width:100%;
-margin-top:15px;
-padding:12px;
-border:none;
-border-radius:10px;
-background:var(--accent);
-color:white;
-cursor:pointer;
-}
-
-/* APP */
-.app{
-display:flex;
-height:100vh;
-}
-
-/* SIDEBAR */
-.sidebar{
-width:260px;
-background:linear-gradient(180deg,#1e1f20,#151515);
-padding:20px;
-border-right:1px solid #2c2c2c;
-}
-
-.sidebar h3{
-color:var(--muted);
-margin-bottom:10px;
-}
-
-.sidebar select,
-.sidebar button{
+input{
 width:100%;
 padding:10px;
 margin-top:10px;
 border-radius:10px;
 border:none;
-background:#2b2a2a;
+background:#111;
+color:white;
+}
+
+button{
+margin-top:10px;
+padding:10px;
+width:100%;
+border:none;
+border-radius:10px;
+background:#7b5cff;
 color:white;
 cursor:pointer;
 }
 
-.sidebar button:hover{
-background:var(--accent);
+.app{
+display:none;
+flex-direction:row;
+height:100vh;
 }
 
-/* CHAT */
-.content{
-flex:1;
-display:flex;
-flex-direction:column;
+.sidebar{
+width:250px;
+background:rgba(255,255,255,0.05);
+padding:20px;
+backdrop-filter:blur(10px);
 }
 
 .chat{
 flex:1;
-padding:25px;
-overflow-y:auto;
 display:flex;
 flex-direction:column;
-gap:12px;
+padding:20px;
+overflow:auto;
+gap:10px;
 }
 
 .msg{
+padding:12px;
+border-radius:12px;
 max-width:70%;
-padding:14px 16px;
-border-radius:16px;
-line-height:1.4;
-font-size:15px;
-animation:fade 0.25s ease;
-word-wrap:break-word;
 }
 
-.user{
-align-self:flex-end;
-background:linear-gradient(135deg,#2b2a2a,#3a3a3a);
-border-bottom-right-radius:5px;
-}
+.user{align-self:flex-end;background:#2a2a3a;}
+.ai{align-self:flex-start;background:rgba(255,255,255,0.08);}
 
-.ai{
-align-self:flex-start;
-background:#1e1f20;
-border:1px solid #333;
-border-bottom-left-radius:5px;
-}
-
-/* INPUT */
 .footer{
 display:flex;
-justify-content:center;
-padding:15px;
-background:transparent;
-}
-
-.input-box{
-display:flex;
-align-items:center;
-gap:10px;
-background:#1e1f20;
-padding:10px 12px;
-border-radius:18px;
-width:90%;
-max-width:700px;
-border:1px solid #333;
-box-shadow:0 10px 30px rgba(0,0,0,0.3);
-}
-
-.input-box input{
-flex:1;
-border:none;
-outline:none;
-background:transparent;
-color:white;
-font-size:15px;
 padding:10px;
+gap:10px;
 }
 
-.send-btn{
-width:42px;
-height:42px;
-border-radius:12px;
-border:none;
-background:linear-gradient(135deg,#744bfa,#5d36db);
-color:white;
-cursor:pointer;
+.footer input{
+flex:1;
 }
 
-@keyframes fade{
-from{opacity:0;transform:translateY(10px);}
-to{opacity:1;transform:translateY(0);}
-}
 </style>
 </head>
 
@@ -196,40 +101,32 @@ to{opacity:1;transform:translateY(0);}
 <!-- LOGIN -->
 <div id="login" class="auth">
 <div class="card">
-<h2>TutorIA</h2>
-<p>Aprende paso a paso</p>
+<h2>TutorIA 🌌</h2>
 <input id="name" placeholder="Tu nombre">
 <button onclick="login()">Entrar</button>
 </div>
 </div>
 
 <!-- APP -->
-<div id="app" class="app" style="display:none;">
+<div id="app" class="app">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
 <h3>Materia</h3>
-
 <select id="subject">
-<option value="math">Matemáticas</option>
-<option value="science">Ciencia</option>
-<option value="history">Historia</option>
-<option value="english">Inglés</option>
+<option>Matemáticas</option>
+<option>Ciencia</option>
+<option>Historia</option>
+<option>Inglés</option>
 </select>
-
-<button onclick="resetChat()">Reiniciar</button>
 </div>
 
-<!-- CHAT -->
-<div class="content">
+<div style="flex:1;display:flex;flex-direction:column;">
 
 <div id="chat" class="chat"></div>
 
 <div class="footer">
-<div class="input-box">
-<input id="input" placeholder="Escribe tu pregunta...">
-<button class="send-btn" onclick="send()">➤</button>
-</div>
+<input id="input" placeholder="Escribe...">
+<button onclick="send()">➤</button>
 </div>
 
 </div>
@@ -237,59 +134,16 @@ to{opacity:1;transform:translateY(0);}
 
 <script>
 
-/* BASE DE DATOS */
-const DB={
-math:{
-topic:"Álgebra",
-hint:"Usa operaciones inversas",
-q:"¿Cómo despejas una x?",
-exp:"Una ecuación mantiene equilibrio."
-},
-science:{
-topic:"Materia",
-hint:"Piensa en partículas",
-q:"¿Qué pasa al calentar?",
-exp:"La materia cambia con energía."
-},
-history:{
-topic:"Historia",
-hint:"Busca causas",
-q:"¿Qué lo provocó?",
-exp:"La historia estudia procesos."
-},
-english:{
-topic:"English",
-hint:"SVO order",
-q:"What is the verb?",
-exp:"Subject + Verb + Object"
-}
-};
-
 let user="";
-let step=1;
 
-/* LOGIN */
 function login(){
-user=document.getElementById("name").value.trim();
+user=document.getElementById("name").value;
 if(!user) return alert("Escribe tu nombre");
 
 document.getElementById("login").style.display="none";
 document.getElementById("app").style.display="flex";
 }
 
-/* SEND */
-function send(){
-const input=document.getElementById("input");
-const text=input.value.trim();
-if(!text) return;
-
-add(user,text,"user");
-input.value="";
-
-setTimeout(bot,500);
-}
-
-/* ADD MSG */
 function add(sender,text,type){
 const div=document.createElement("div");
 div.className="msg "+type;
@@ -297,28 +151,46 @@ div.textContent=sender+": "+text;
 document.getElementById("chat").appendChild(div);
 }
 
-/* BOT */
-function bot(){
-const d=DB[document.getElementById("subject").value];
+/* 🤖 IA REAL */
+async function send(){
 
-if(step<=2){
-add("TutorIA",`Tema: ${d.topic}. ${d.q}`,"ai");
-step=3;
-}
-else if(step<=5){
-add("TutorIA",`Pista: ${d.hint}`,"ai");
-step=6;
-}
-else{
-add("TutorIA",d.exp,"ai");
-step=1;
-}
-}
+const input=document.getElementById("input");
+const text=input.value;
+if(!text) return;
 
-/* RESET */
-function resetChat(){
-document.getElementById("chat").innerHTML="";
-step=1;
+add(user,text,"user");
+input.value="";
+
+add("TutorIA","pensando... 🤖","ai");
+
+const subject=document.getElementById("subject").value;
+
+const res = await fetch("https://api.openai.com/v1/chat/completions", {
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer TU_API_KEY_AQUI"
+},
+body:JSON.stringify({
+model:"gpt-4o-mini",
+messages:[
+{
+role:"system",
+content:`Eres un tutor educativo. Materia: ${subject}. Ayuda al estudiante sin dar respuestas directas.`
+},
+{
+role:"user",
+content:text
+}
+]
+})
+});
+
+const data = await res.json();
+
+const reply = data.choices[0].message.content;
+
+add("TutorIA",reply,"ai");
 }
 
 </script>
