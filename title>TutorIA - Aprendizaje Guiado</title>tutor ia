@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IA con Parámetros - Tutor Educativo</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+:root {
+    --bg-dark:#131314;
+    --bg-sidebar:#1e1f20;
+    --bg-chat-user:#2b2a2a;
+    --bg-chat-ai:#1e1f20;
+    --accent:#744bfa;
+    --accent-hover:#5d36db;
+    --text:#e3e3e3;
+    --muted:#9aa0a6;
+    --border:#3c4043;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI;}
+
+body{
+    background:var(--bg-dark);
+    color:var(--text);
+    height:100vh;
+    overflow:hidden;
+}
+
+.hidden{display:none!important;}
+
+.dashboard{display:flex;height:100vh;}
+
+.auth{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:radial-gradient(circle,#2c1b4d,#131314);
+}
+
+.card{
+    background:var(--bg-sidebar);
+    padding:30px;
+    border-radius:12px;
+    width:350px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    background:var(--bg-dark);
+    border:1px solid var(--border);
+    color:white;
+    border-radius:6px;
+}
+
+button{
+    width:100%;
+    margin-top:15px;
+    padding:10px;
+    background:var(--accent);
+    border:none;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{background:var(--accent-hover);}
+
+.sidebar{
+    width:260px;
+    background:var(--bg-sidebar);
+    padding:15px;
+}
+
+.content{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+.chat{
+    flex:1;
+    overflow:auto;
+    padding:20px;
+}
+
+.msg{
+    margin-bottom:10px;
+    padding:10px;
+    border-radius:8px;
+}
+
+.user{background:var(--bg-chat-user);}
+.ai{background:var(--bg-chat-ai);border:1px solid var(--border);}
+
+.footer{
+    padding:10px;
+    display:flex;
+    gap:10px;
+}
+
+.footer input{
+    flex:1;
+    margin:0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="auth">
+    <div class="card">
+        <h2>IA Tutor</h2>
+        <input id="name" placeholder="Tu nombre">
+        <button onclick="login()">Entrar</button>
+    </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="dashboard hidden">
+
+    <div class="sidebar">
+        <h3>Materias</h3>
+        <select id="subject" onchange="changeSubject()">
+            <option value="mathematics">Matemáticas</option>
+            <option value="science">Ciencia</option>
+            <option value="communication">Comunicación</option>
+            <option value="history">Historia</option>
+            <option value="english">Inglés</option>
+        </select>
+
+        <button onclick="resetChat()">Reiniciar</button>
+    </div>
+
+    <div class="content">
+
+        <div id="chat" class="chat"></div>
+
+        <div class="footer">
+            <input id="input" placeholder="Escribe tu pregunta">
+            <button onclick="send()">Enviar</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+/* ======================
+   BASE DE DATOS
+====================== */
+const DATA = {
+ mathematics:{
+  topic:"Álgebra",
+  hints:["Usa operaciones inversas","Despeja la variable paso a paso"],
+  questions:["¿Qué operación es opuesta a multiplicar?","¿Cómo aislarías la incógnita?"],
+  explanation:"Una ecuación mantiene igualdad en ambos lados."
+ },
+ science:{
+  topic:"Materia",
+  hints:["Observa cambios físicos","Piensa en energía"],
+  questions:["¿Qué pasa al calentar un sólido?","¿Qué cambia en las partículas?"],
+  explanation:"La materia cambia según la energía."
+ },
+ communication:{
+  topic:"Lenguaje",
+  hints:["Busca el verbo","Identifica sujeto"],
+  questions:["¿Cuál es la acción?","¿Quién la realiza?"],
+  explanation:"Las oraciones tienen sujeto y predicado."
+ },
+ history:{
+  topic:"Historia",
+  hints:["Busca causas","Analiza consecuencias"],
+  questions:["¿Qué lo provocó?","¿Qué cambió después?"],
+  explanation:"La historia estudia procesos."
+ },
+ english:{
+  topic:"English",
+  hints:["SVO order","Verbs change in 3rd person"],
+  questions:["What is the verb?","What tense is it?"],
+  explanation:"English follows Subject-Verb-Object."
+ }
+};
+
+/* ======================
+   ESTADO
+====================== */
+let user="";
+let subject="mathematics";
+let step=1;
+
+/* ======================
+   LOGIN
+====================== */
+function login(){
+ user=document.getElementById("name").value.trim();
+ if(!user) return alert("Escribe tu nombre");
+
+ document.getElementById("login").classList.add("hidden");
+ document.getElementById("app").classList.remove("hidden");
+}
+
+/* ======================
+   CAMBIAR MATERIA
+====================== */
+function changeSubject(){
+ subject=document.getElementById("subject").value;
+ resetChat();
+}
+
+/* ======================
+   CHAT
+====================== */
+function send(){
+ const input=document.getElementById("input");
+ const text=input.value.trim();
+ if(!text) return;
+
+ addMsg(user,text,"user");
+ input.value="";
+
+ setTimeout(()=>bot(text),500);
+}
+
+function addMsg(sender,text,type){
+ const div=document.createElement("div");
+ div.className=`msg ${type}`;
+
+ div.innerHTML=`
+ <strong>${sender}</strong><br>
+ ${escapeHtml(text)}
+ `;
+
+ document.getElementById("chat").appendChild(div);
+}
+
+/* seguridad básica */
+function escapeHtml(str){
+ return str.replaceAll("<","&lt;").replaceAll(">","&gt;");
+}
+
+/* ======================
+   LÓGICA TUTOR
+====================== */
+function bot(){
+ const d=DATA[subject];
+ if(!d) return;
+
+ if(step<=2){
+  addMsg("Tutor IA",
+  `Vamos a analizar ${d.topic}. Pregunta: ${d.questions[0]}`,
+  "ai");
+  step=3;
+ }
+
+ else if(step<=5){
+  addMsg("Tutor IA",
+  `Pista: ${d.hints[0]} <br> Ahora: ${d.questions[1]}`,
+  "ai");
+  step=6;
+ }
+
+ else{
+  addMsg("Tutor IA",
+  `${d.explanation} <br> ¿Puedes explicarlo tú ahora?`,
+  "ai");
+  step=1;
+ }
+}
+
+/* ======================
+   RESET
+====================== */
+function resetChat(){
+ document.getElementById("chat").innerHTML="";
+ step=1;
+}
+
+</script>
+
+</body>
+</html>
