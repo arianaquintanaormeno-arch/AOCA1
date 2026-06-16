@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA con Parámetros - Tutor Educativo</title>
+    <title>IA con Parámetros - Tutor de Razonamiento</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ==========================================
@@ -43,7 +42,6 @@
         .text-success { color: var(--success); }
         .text-warning { color: var(--warning); }
 
-        /* Animaciones fluidas */
         .fade-in {
             animation: fadeIn 0.4s ease-out forwards;
         }
@@ -53,7 +51,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Estructura del Login */
         .auth-container {
             display: flex;
             justify-content: center;
@@ -125,7 +122,6 @@
 
         .btn-primary:hover { background-color: var(--accent-hover); }
 
-        /* Panel Principal / Interfaz Dashboard */
         .dashboard-container {
             display: flex;
             height: 100vh;
@@ -223,7 +219,6 @@
         }
         .sidebar-menu li.active { border-left: 3px solid var(--accent-color); }
 
-        /* Área de Trabajo y Mensajes */
         .content-area {
             flex: 1;
             display: flex;
@@ -284,7 +279,6 @@
         .card ul { list-style: none; }
         .card ul li { margin-bottom: 8px; font-size: 0.95rem; }
 
-        /* Estilo de Mensajes tipo ChatGPT/Gemini */
         .chat-wrapper {
             flex: 1;
             display: flex;
@@ -324,7 +318,6 @@
         .user .msg-avatar { background-color: #007acc; }
         .ai .msg-avatar { background-color: var(--accent-color); }
 
-        /* Botones de acción */
         .helper-buttons {
             display: flex;
             justify-content: center;
@@ -350,7 +343,6 @@
             transform: translateY(-2px);
         }
 
-        /* Footer de consulta */
         .input-footer {
             padding: 20px 30px;
             max-width: 850px;
@@ -404,7 +396,7 @@
             <div class="logo-area">
                 <i class="fa-solid fa-graduation-cap brain-icon"></i>
                 <h1>IA con Parámetros</h1>
-                <p>Tu tutor personalizado para aprender a pensar</p>
+                <p>Tu tutor personalizado centrado en razonamiento crítico</p>
             </div>
             <form id="login-form">
                 <div class="input-group">
@@ -426,7 +418,7 @@
                 <div class="avatar"><i class="fa-solid fa-user"></i></div>
                 <div class="user-info">
                     <h3 id="display-username">Estudiante</h3>
-                    <p>Nivel Actual</p>
+                    <p>Foco: Razonamiento</p>
                 </div>
             </div>
             <div class="progress-section">
@@ -442,13 +434,10 @@
                 <h4>Materias Disponibles</h4>
                 <ul id="subject-list">
                     <li class="active" data-subject="all"><i class="fa-solid fa-border-all"></i> Todas las áreas</li>
-                    <li data-subject="Mathematics"><i class="fa-solid fa-calculator"></i> Matemáticas</li>
+                    <li data-subject="DPSC"><i class="fa-solid fa-gavel"></i> DPSC</li>
                     <li data-subject="Science"><i class="fa-solid fa-flask"></i> Ciencia y Tecnología</li>
                     <li data-subject="Communication"><i class="fa-solid fa-book"></i> Comunicación</li>
-                    <li data-subject="Social Studies"><i class="fa-solid fa-users"></i> Ciencias Sociales</li>
-                    <li data-subject="History"><i class="fa-solid fa-landmark"></i> Historia</li>
-                    <li data-subject="Geography"><i class="fa-solid fa-earth-americas"></i> Geografía</li>
-                    <li data-subject="English"><i class="fa-solid fa-language"></i> Inglés</li>
+                    <li data-subject="Mathematics"><i class="fa-solid fa-calculator"></i> Matemáticas</li>
                 </ul>
             </nav>
         </aside>
@@ -463,19 +452,20 @@
                 <div id="dashboard-home" class="fade-in">
                     <div class="welcome-banner">
                         <h1>¡Hola, <span id="welcome-name">Estudiante</span>! ¿Qué analizaremos hoy?</h1>
-                        <p>Recuerda: No te daré las respuestas directamente. ¡Descubrámoslas juntos paso a paso!</p>
+                        <p>Filosofía del sistema: Lógica estructurada y razonamiento analítico sin desvíos.</p>
                     </div>
                     <div class="cards-grid">
                         <div class="card recent-activity">
-                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Actividad Reciente</h3>
+                            <h3><i class="fa-solid fa-clock-rotate-left"></i> Áreas Críticas</h3>
                             <ul>
-                                <li><i class="fa-solid fa-check text-success"></i> Comprensión de las Leyes de Newton (Ciencia)</li>
-                                <li><i class="fa-solid fa-spinner text-warning"></i> Análisis de Fracciones Homogéneas (Mate)</li>
+                                <li><i class="fa-solid fa-circle text-success"></i> DPSC (Ciudadanía y Ética)</li>
+                                <li><i class="fa-solid fa-circle text-warning"></i> Ciencia (Método Inductivo)</li>
+                                <li><i class="fa-solid fa-circle var(--accent-color)"></i> Comunicación (Análisis Crítico)</li>
                             </ul>
                         </div>
                         <div class="card tips-card">
-                            <h3><i class="fa-solid fa-lightbulb"></i> Tip del Día</h3>
-                            <p>"Explicar un problema con tus propias palabras es el primer paso para dominarlo por completo."</p>
+                            <h3><i class="fa-solid fa-lightbulb"></i> Regla de Oro</h3>
+                            <p>"Ninguna respuesta directa es útil si no se ha asimilado previamente la cadena de causas y efectos lógicos."</p>
                         </div>
                     </div>
                 </div>
@@ -483,78 +473,83 @@
                 <div id="chat-container" class="chat-wrapper hidden">
                     <div id="chat-messages" class="chat-messages-area"></div>
                     <div id="helper-actions" class="helper-buttons hidden fade-in">
-                        <button id="btn-hint" class="btn-action"><i class="fa-solid fa-wand-magic-sparkles"></i> 💡 Dame una pista</button>
-                        <button id="btn-ask-more" class="btn-action"><i class="fa-solid fa-circle-question"></i> ❓ Hazme otra pregunta</button>
-                        <button id="btn-explain" class="btn-action"><i class="fa-solid fa-book-open"></i> 📖 Explícame un poco más</button>
-                        <button id="btn-retry" class="btn-action"><i class="fa-solid fa-rotate"></i> 🔄 Intentar de nuevo</button>
+                        <button id="btn-hint" class="btn-action"><i class="fa-solid fa-wand-magic-sparkles"></i> 💡 Solicitar Guía de Lógica</button>
+                        <button id="btn-ask-more" class="btn-action"><i class="fa-solid fa-circle-question"></i> ❓ Profundizar Pregunta</button>
+                        <button id="btn-explain" class="btn-action"><i class="fa-solid fa-book-open"></i> 📖 Ver Marco Conceptual</button>
+                        <button id="btn-retry" class="btn-action"><i class="fa-solid fa-rotate"></i> 🔄 Reestructurar Premisa</button>
                     </div>
                 </div>
             </div>
 
             <footer class="input-footer">
                 <form id="chat-input-form" class="search-box-container">
-                    <input type="text" id="user-query" placeholder="Haz una pregunta o dinos qué tema quieres estudiar..." autocomplete="off" required>
+                    <input type="text" id="user-query" placeholder="Escribe tu planteamiento temático aquí..." autocomplete="off" required>
                     <button type="submit" id="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
                 </form>
-                <p class="disclaimer">Tutor de IA con Parámetros. Diseñado pedagógicamente para fomentar el razonamiento crítico.</p>
+                <p class="disclaimer">Tutor IA Estricto: Orientado puramente al razonamiento cognitivo de alta fidelidad.</p>
             </footer>
         </main>
     </div>
 
     <script>
+        // Base de datos optimizada en las tres áreas clave requeridas
         const ACADEMIC_DATABASE = {
-            "Mathematics": {
-                topic: "Ecuaciones y Álgebra",
-                hints: ["Recuerda que para despejar la 'x', debemos hacer la operación inversa en ambos lados.", "Si algo está sumando, pasa al otro lado restando."],
-                questions: ["¿Qué operación matemática es la opuesta a la multiplicación?", "¿Qué crees que pasaría si restamos el mismo número en ambos lados?"],
-                explanation: "Una ecuación es como una balanza perfectamente equilibrada. Lo que haces en un lado debes hacerlo en el otro para mantener la igualdad."
+            "DPSC": {
+                topic: "DPSC (Desarrollo Personal, Ciudadanía y Cívica) - Ética, Normas y Convivencia Colectiva",
+                hints: [
+                    "Evalúa el conflicto priorizando la dignidad humana sobre el interés particular.", 
+                    "Analiza el dilema a la luz de los principios constitucionales y los derechos fundamentales."
+                ],
+                questions: [
+                    "¿Cuáles son las posturas en conflicto y qué principios éticos están en juego en este escenario?", 
+                    "¿De qué manera una solución basada en el diálogo democrático previene un desvío o quiebre institucional?"
+                ],
+                explanation: "En DPSC, las acciones deben regirse bajo la consistencia moral, los marcos legales de convivencia democrática y el pensamiento ético-filosófico estructurado."
             },
             "Science": {
-                topic: "Método Científico y Materia",
-                hints: ["Piensa en los tres estados básicos del agua cuando cambia la temperatura.", "La gravedad afecta a todos los objetos con masa de la misma forma."],
-                questions: ["¿Qué diferencia notas entre un hielo y el agua líquida a nivel de sus moléculas?", "¿Qué hipótesis propondrías para explicar este fenómeno?"],
-                explanation: "La materia cambia según la energía térmica aplicada. A mayor calor, las partículas adquieren mayor movimiento y se separan."
+                topic: "Ciencia y Tecnología - Método Científico, Razonamiento Inductivo y Evidencia Empírica",
+                hints: [
+                    "Separa las variables dependientes de las independientes antes de trazar una conclusión.", 
+                    "Toda premisa científica exige un mecanismo de falsabilidad verificable mediante la lógica empírica."
+                ],
+                questions: [
+                    "¿Qué patrón causal puedes deducir a partir de los datos experimentales observados?", 
+                    "¿Cómo estructurarías una hipótesis formal que relacione la causa física analizada con su efecto?"
+                ],
+                explanation: "El razonamiento científico descarta opiniones sesgadas y se ampara estrictamente en la correlación lógica, el aislamiento de variables y la repetibilidad del fenómeno."
             },
             "Communication": {
-                topic: "Comprensión Lectora y Sintaxis",
-                hints: ["El núcleo del sujeto siempre realiza la acción principal.", "Busca el verbo primero para identificar qué se está haciendo."],
-                questions: ["¿Cuál es la acción principal que ocurre en tu oración?", "¿Quién o qué está ejecutando esa acción?"],
-                explanation: "Toda oración coordinada o simple requiere un sujeto activo y un predicado que explique la acción y sus circunstancias."
+                topic: "Comunicación - Análisis Crítico del Discurso, Sintaxis y Coherencia Argumentativa",
+                hints: [
+                    "Identifica los sesgos cognitivos o las falacias lógicas presentes implícitamente en el texto.", 
+                    "La macroestructura textual determina el propósito comunicativo; no dejes que los adornos desvíen la tesis central."
+                ],
+                questions: [
+                    "¿Cuál es el argumento núcleo del autor y qué premisas lógicas utiliza para sostenerlo?", 
+                    "¿Existe alguna contradicción o vacío conceptual en la inferencia textual detectada?"
+                ],
+                explanation: "La competencia comunicativa avanzada requiere decodificar la intención del emisor a través de la lógica formal, aislando la tesis de los distractores discursivos."
             },
-            "Social Studies": {
-                topic: "Ciencias Sociales y Ciudadanía",
-                hints: ["Los derechos humanos existen para proteger la dignidad de cada persona.", "La convivencia armónica requiere tanto el respeto a las leyes como la empatía colectiva."],
-                questions: ["¿Por qué crees que son necesarias las normas en una sociedad organizada?", "¿Cómo definirías el concepto de justicia en tu comunidad?"],
-                explanation: "Las ciencias sociales analizan las interacciones humanas y cómo las estructuras legales y ciudadanas garantizan el bien común."
-            },
-            "History": {
-                topic: "Procesos Históricos",
-                hints: ["Analiza las causas económicas y sociales que detonaron el conflicto.", "Todo evento histórico es consecuencia de decisiones y tensiones previas."],
-                questions: ["¿Qué motivaciones crees que tenían las personas de esa época para exigir cambios?", "¿Qué continuidades y rupturas observas después de ese acontecimiento?"],
-                explanation: "La historia no es una secuencia memorística de fechas, sino un mapa de causas, desarrollos y consecuencias culturales, políticas y sociales."
-            },
-            "Geography": {
-                topic: "Geografía y Ecosistemas",
-                hints: ["Las cordilleras modifican el clima, los vientos y la altitud de las regiones contiguas.", "La distribución de los recursos naturales moldea fuertemente las actividades humanas."],
-                questions: ["¿Cómo influye la presencia de una cadena montañosa en el clima de una región?", "¿De qué manera el entorno geográfico afecta el desarrollo de una ciudad?"],
-                explanation: "La geografía estudia la relación dinámica entre el relieve, el clima y los grupos humanos que habitan y transforman el territorio."
-            },
-            "English": {
-                topic: "Grammar & Structure",
-                hints: ["Remember that in English, adjectives usually go before the noun.", "Third person singular (he, she, it) adds an 's' to the verb in present simple."],
-                questions: ["What is the main action (verb) in your sentence?", "Are you talking about the past, present, or future?"],
-                explanation: "English structures rely heavily on sentence order: Subject + Verb + Object. Modifiers always precede the object they describe."
+            "Mathematics": {
+                topic: "Modelamiento Matemático y Lógica Formal",
+                hints: [
+                    "Expresa las restricciones del problema en variables puramente lógicas.", 
+                    "Aplica operaciones inversas paso a paso para mantener la igualdad analítica."
+                ],
+                questions: [
+                    "¿Cuál es la relación matemática invariable entre los elementos planteados?", 
+                    "¿Qué axioma te permite justificar el siguiente paso operativo sin alterar el sistema?"
+                ],
+                explanation: "La matemática representa la pureza del razonamiento lógico-deductivo, libre de ambigüedades interpretativas."
             }
         };
 
-        // Estado global de los pasos requeridos
         let currentStudent = "";
-        let selectedSubject = "Mathematics";
+        let selectedSubject = "DPSC"; // Prioridad inicial por defecto
         let currentStep = 1;
         let interactionCount = 0;
         let userScore = 15;
 
-        // selectores DOM
         const loginPage = document.getElementById("login-page");
         const mainPlatform = document.getElementById("main-platform");
         const loginForm = document.getElementById("login-form");
@@ -572,7 +567,6 @@
         const statusBadge = document.getElementById("status-badge");
         const subjectItems = document.querySelectorAll("#subject-list li");
 
-        // Autenticación simple
         loginForm.addEventListener("submit", (e) => {
             e.preventDefault();
             currentStudent = studentNameInput.value.trim();
@@ -591,7 +585,6 @@
             resetChat();
         });
 
-        // Cambio de materias
         subjectItems.forEach(item => {
             item.addEventListener("click", () => {
                 subjectItems.forEach(i => i.classList.remove("active"));
@@ -599,134 +592,15 @@
                 const sub = item.getAttribute("data-subject");
                 if(sub !== "all") {
                     selectedSubject = sub;
-                    currentViewTitle.textContent = `Tutoría de ${item.textContent.trim()}`;
+                    currentViewTitle.textContent = `Tutoría Orientada a Razonamiento: ${item.textContent.trim()}`;
                 } else {
-                    selectedSubject = "Mathematics";
+                    selectedSubject = "DPSC";
                     currentViewTitle.textContent = "Panel de Aprendizaje Guiado";
                 }
                 resetChat();
             });
         });
 
-        // Intercepción del Formulario para procesar preguntas de los alumnos
         chatInputForm.addEventListener("submit", (e) => {
             e.preventDefault();
-            const query = userQueryInput.value.trim();
-            if(!query) return;
-
-            if(chatContainer.classList.contains("hidden")) {
-                dashboardHome.classList.add("hidden");
-                chatContainer.classList.remove("hidden");
-                helperActions.classList.remove("hidden");
-            }
-
-            appendMessage(currentStudent, query, "user");
-            userQueryInput.value = "";
-
-            setTimeout(() => {
-                processTeacherResponse(query);
-            }, 800);
-        });
-
-        function appendMessage(sender, text, type) {
-            const msgDiv = document.createElement("div");
-            msgDiv.classList.add("message", type, "fade-in");
-            const avatarLetter = type === "user" ? sender[0].toUpperCase() : "👨‍🏫";
-
-            msgDiv.innerHTML = `
-                <div class="msg-avatar">${avatarLetter}</div>
-                <div class="msg-body">
-                    <strong>${sender}</strong>
-                    <p>${text}</p>
-                </div>
-            `;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        // LÓGICA DE 7 PASOS EXIGIDA
-        function processTeacherResponse(userText) {
-            const data = ACADEMIC_DATABASE[selectedSubject];
-            interactionCount++;
-            updateProgress(4);
-
-            if (currentStep === 1 || currentStep === 2) {
-                // Paso 1 (Entender duda) + Paso 2 (Identificar materia/tema)
-                const phrases = [
-                    "¡Excelente pregunta! Vamos a pensar juntos.",
-                    "Qué interesante planteamiento. ¿Qué sabes ya sobre esto?",
-                    "¡Me gusta tu curiosidad! Evaluemos la situación."
-                ];
-                const randomGreeting = phrases[Math.floor(Math.random() * phrases.length)];
-
-                appendMessage("Profesor IA", `${randomGreeting} Veo que tu consulta se vincula con el tema de **${data.topic}**.<br><br>Para guiarte, te hago esta pregunta inicial: <strong>${data.questions[0]}</strong>`, "ai");
-                currentStep = 3;
-            }
-            else if (currentStep === 3 || currentStep === 4 || currentStep === 5) {
-                // Paso 3 (Pregunta guía hecha) -> Paso 4 (Esperar respuesta) -> Paso 5 (Dar pista en lugar del resultado)
-                appendMessage("Profesor IA", `¡Gran análisis, vas por excelente camino! Te daré una pista complementaria para expandir el razonamiento: <em>"${data.hints[0]}"</em>.<br><br>Basándote en esto, ¿cómo responderías a la siguiente pregunta?: <strong>${data.questions[1]}</strong>`, "ai");
-                currentStep = 6;
-            }
-            else if (currentStep === 6) {
-                // Paso 6: Hacer otra pregunta reguladora
-                appendMessage("Profesor IA", `¡Estás a punto de resolverlo! Tu deducción es muy sólida. Pensemos un paso más allá usando esto: <em>"${data.hints[1]}"</em>. ¿Cómo lo conectarías con tu problema inicial?`, "ai");
-                currentStep = 7;
-            }
-            else {
-                // Paso 7: Explicar formalmente y solicitar la conclusión propia del estudiante
-                updateProgress(15);
-                appendMessage("Profesor IA", `¡Brillante! Has hecho un esfuerzo analítico extraordinario. <br><br><strong>Explicación detallada del concepto:</strong> ${data.explanation}<br><br>Para consolidar tu aprendizaje, ¿podrías escribir la conclusión final en tus propias palabras?`, "ai");
-                currentStep = 1;
-            }
-        }
-
-        // ACCIONES DE LOS BOTONES INTERACTIVOS
-        document.getElementById("btn-hint").addEventListener("click", () => {
-            const data = ACADEMIC_DATABASE[selectedSubject];
-            const hint = data.hints[Math.floor(Math.random() * data.hints.length)];
-            appendMessage("Profesor IA", `💡 <strong>Pista de apoyo:</strong> ${hint} ¡Pon a prueba este enfoque!`, "ai");
-        });
-
-        document.getElementById("btn-ask-more").addEventListener("click", () => {
-            const data = ACADEMIC_DATABASE[selectedSubject];
-            const question = data.questions[Math.floor(Math.random() * data.questions.length)];
-            appendMessage("Profesor IA", `❓ <strong>Miremos el problema desde otra perspectiva:</strong> ${question}`, "ai");
-        });
-
-        document.getElementById("btn-explain").addEventListener("click", () => {
-            const data = ACADEMIC_DATABASE[selectedSubject];
-            appendMessage("Profesor IA", `📖 <strong>Profundicemos un poco más:</strong> ${data.explanation} ¿Tiene más claridad ahora?`, "ai");
-        });
-
-        document.getElementById("btn-retry").addEventListener("click", () => {
-            appendMessage("Profesor IA", `🔄 <strong>¡No te preocupes! El error es un gran maestro.</strong> Reiniciemos el análisis. Intentemos abordar el planteamiento inicial de nuevo. ¿Qué consideras que podemos ajustar de la respuesta anterior?`, "ai");
-        });
-
-        // BARRAS DE PROGRESO CON LAS 3 CATEGORÍAS EXIGIDAS
-        function updateProgress(amount) {
-            userScore = Math.min(userScore + amount, 100);
-            mainProgress.style.width = `${userScore}%`;
-
-            if(userScore < 40) {
-                statusBadge.className = "badge beginner";
-                statusBadge.textContent = "🔴 Principiante";
-            } else if (userScore < 80) {
-                statusBadge.className = "badge learning";
-                statusBadge.textContent = "🟡 Aprendiendo";
-            } else {
-                statusBadge.className = "badge mastered";
-                statusBadge.textContent = "🟢 Maestro";
-            }
-        }
-
-        function resetChat() {
-            chatMessages.innerHTML = "";
-            currentStep = 1;
-            interactionCount = 0;
-            chatContainer.classList.add("hidden");
-            helperActions.classList.add("hidden");
-            dashboardHome.classList.remove("hidden");
-        }
-    </script>
-</body>
-</html>
+            const query = userQuery
