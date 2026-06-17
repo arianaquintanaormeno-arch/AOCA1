@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maqueta 3D del Tahuantinsuyo</title>
+    <title>Maqueta Rectangular del Tahuantinsuyo</title>
     <style>
-        body { margin: 0; overflow: hidden; background-color: #1a1a1a; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; overflow: hidden; background-color: #111; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         #blocker {
-            position: absolute; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7);
+            position: absolute; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: white; z-index: 10; cursor: pointer; transition: opacity 0.3s;
+            color: white; z-index: 10; cursor: pointer; transition: opacity 0.4s;
         }
-        #blocker h1 { font-size: 36px; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); letter-spacing: 2px; color: #f4e4bc; }
-        #blocker p { font-size: 16px; color: #ddd; margin: 5px 0; }
-        #instructions { margin-top: 20px; padding: 20px; border: 1px solid rgba(244, 228, 188, 0.3); border-radius: 8px; background: rgba(0,0,0,0.4); text-align: center; }
+        #blocker h1 { font-size: 32px; margin-bottom: 10px; color: #f4e4bc; text-transform: uppercase; letter-spacing: 3px; }
+        #blocker p { font-size: 15px; color: #ccc; margin: 5px 0; }
+        #instructions { margin-top: 20px; padding: 15px; border: 1px solid rgba(244, 228, 188, 0.4); border-radius: 6px; background: rgba(255,255,255,0.05); text-align: center; }
         #ui-hint {
-            position: absolute; bottom: 20px; left: 20px; color: rgba(255,255,255,0.6); 
-            font-size: 14px; pointer-events: none; z-index: 5; display: none;
+            position: absolute; bottom: 20px; left: 20px; color: rgba(255,255,255,0.5); 
+            font-size: 13px; pointer-events: none; z-index: 5; display: none; letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
     <div id="blocker">
-        <h1>MAQUETA TAHUANTINSUYO</h1>
-        <p>Haz clic en cualquier lugar para interactuar con la maqueta</p>
+        <h1>Maqueta Tahuantinsuyo</h1>
+        <p>Haz clic para interactuar con el diorama</p>
         <div id="instructions">
-            <p>🖱️ <strong>Click izquierdo + Arrastrar:</strong> Rotar vista</p>
-            <p>🔍 <strong>Rueda del mouse:</strong> Acercar / Alejar</p>
-            <p>✋ <strong>Click derecho + Arrastrar:</strong> Mover cámara (Pan)</p>
+            <p>🖱️ <strong>Rotar:</strong> Click izquierdo + Arrastrar</p>
+            <p>🔍 <strong>Zoom:</strong> Rueda del mouse</p>
+            <p>✋ <strong>Mover:</strong> Click derecho + Arrastrar</p>
         </div>
     </div>
-    <div id="ui-hint">Maqueta interactiva del Tahuantinsuyo</div>
+    <div id="ui-hint">MAQUETA DE RELIEVE • TRES.JS</div>
 
     <script type="importmap">
         {
@@ -48,67 +48,82 @@
 
         // --- Configuración de la Escena ---
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x2a2a2a); // Fondo oscuro tipo estudio
-        scene.fog = new THREE.FogExp2(0x2a2a2a, 0.003);
+        scene.background = new THREE.Color(0x1a1a1a);
+        scene.fog = new THREE.FogExp2(0x1a1a1a, 0.002);
 
-        // Cámara isométrica / diorama
+        // Cámara ortográfica para efecto diorama/maqueta
         const aspect = window.innerWidth / window.innerHeight;
-        const d = 120;
+        const d = 130;
         const camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 1000);
-        camera.position.set(100, 100, 100); // Ángulo isométrico clásico
-        camera.lookAt(0, 0, 0);
+        camera.position.set(120, 140, 120); // Ángulo isométrico elevado
+        camera.lookAt(0, 5, 0);
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.body.appendChild(renderer.domElement);
 
-        // --- Iluminación tipo Estudio de Maqueta ---
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        // --- Iluminación de Estudio ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         scene.add(ambientLight);
 
-        const sunLight = new THREE.DirectionalLight(0xfff4e5, 1.4);
-        sunLight.position.set(50, 100, 50);
+        const sunLight = new THREE.DirectionalLight(0xfff4e5, 1.5);
+        sunLight.position.set(80, 150, 80);
         sunLight.castShadow = true;
         sunLight.shadow.mapSize.width = 2048;
         sunLight.shadow.mapSize.height = 2048;
         sunLight.shadow.camera.near = 0.5;
-        sunLight.shadow.camera.far = 300;
-        sunLight.shadow.camera.left = -100;
-        sunLight.shadow.camera.right = 100;
-        sunLight.shadow.camera.top = 100;
-        sunLight.shadow.camera.bottom = -100;
+        sunLight.shadow.camera.far = 400;
+        sunLight.shadow.camera.left = -150;
+        sunLight.shadow.camera.right = 150;
+        sunLight.shadow.camera.top = 150;
+        sunLight.shadow.camera.bottom = -150;
         scene.add(sunLight);
 
-        // Luz de relleno suave para las sombras
         const fillLight = new THREE.DirectionalLight(0x87CEEB, 0.3);
-        fillLight.position.set(-50, 20, -50);
+        fillLight.position.set(-80, 50, -80);
         scene.add(fillLight);
 
-        // --- Función de Terreno (Heightmap) ---
+        // --- Función de Terreno (RELIEVE CONTENIDO, BORDES PLANOS) ---
         function getHeight(x, z) {
-            let y = Math.sin(x * 0.01) * 10 + Math.cos(z * 0.01) * 10;
+            let y = 0;
             const dist = Math.sqrt(x * x + z * z);
+            const maxDist = 180; // Límite del relieve
             
-            if (dist > 90) {
-                y += (dist - 90) * 0.9 + Math.sin(x * 0.08) * 4 + Math.cos(z * 0.08) * 4;
-            }
-            
+            // Factor de suavizado: 1 en el centro, 0 en los bordes (evita que "vuele")
+            const edgeFactor = Math.max(0, 1 - (dist / maxDist));
+            const smoothEdge = edgeFactor * edgeFactor * (3 - 2 * edgeFactor); // Smoothstep
+
+            // Relieve interno (Montañas y colinas)
+            let internalHeight = Math.sin(x * 0.015) * 18 + Math.cos(z * 0.015) * 18;
+            internalHeight += Math.sin(x * 0.04 + z * 0.02) * 5; // Detalle
+
+            // Valle del río
             const riverX = x + Math.sin(z * 0.03) * 15;
             const riverDist = Math.abs(riverX);
-            if (riverDist < 18) {
-                y -= (18 - riverDist) * 0.7;
+            if (riverDist < 22) {
+                internalHeight -= (22 - riverDist) * 0.9;
             }
-            
-            if (z < -110 && Math.abs(x) < 50) {
-                y = -4; 
+
+            // Lago en la parte alta (fondo)
+            if (z < -100 && Math.abs(x) < 60 && internalHeight < 8) {
+                internalHeight = -2;
             }
+
+            // Aplicar el suavizado de bordes para que sea plano en el perímetro
+            y = internalHeight * smoothEdge;
+
+            // Asegurar que el borde absoluto sea perfectamente plano (y = 0)
+            if (dist > maxDist - 2) {
+                y = 0;
+            }
+
             return y;
         }
 
-        // --- Generación del Terreno y Base ---
-        const terrainGeo = new THREE.PlaneGeometry(400, 400, 150, 150);
+        // --- Generación del Terreno ---
+        const terrainGeo = new THREE.PlaneGeometry(400, 400, 160, 160);
         const pos = terrainGeo.attributes.position;
         for (let i = 0; i < pos.count; i++) {
             const x = pos.getX(i);
@@ -117,31 +132,41 @@
         }
         terrainGeo.computeVertexNormals();
         
-        // Material estilo "arcilla/pintura" para la maqueta
         const terrainMat = new THREE.MeshStandardMaterial({ 
-            color: 0x5a7d51, flatShading: true, roughness: 0.8, metalness: 0.1
+            color: 0x5a7d51, flatShading: true, roughness: 0.85, metalness: 0.05
         });
         const terrain = new THREE.Mesh(terrainGeo, terrainMat);
         terrain.rotation.x = -Math.PI / 2;
         terrain.receiveShadow = true;
+        terrain.castShadow = true;
         scene.add(terrain);
 
-        // Base de la maqueta (efecto plataforma de madera/tierra)
-        const baseGeo = new THREE.BoxGeometry(400, 15, 400);
-        const baseMat = new THREE.MeshStandardMaterial({ color: 0x3e2723, roughness: 0.9 });
+        // --- BASE DE LA MAQUETA (Tabla sólida) ---
+        // Base principal
+        const baseGeo = new THREE.BoxGeometry(410, 12, 410);
+        const baseMat = new THREE.MeshStandardMaterial({ color: 0x4E342E, roughness: 0.9, metalness: 0.1 });
         const base = new THREE.Mesh(baseGeo, baseMat);
-        base.position.y = -12;
+        base.position.y = -6;
         base.receiveShadow = true;
+        base.castShadow = true;
         scene.add(base);
+
+        // Borde decorativo inferior
+        const borderGeo = new THREE.BoxGeometry(420, 8, 420);
+        const borderMat = new THREE.MeshStandardMaterial({ color: 0x3E2723, roughness: 0.95 });
+        const border = new THREE.Mesh(borderGeo, borderMat);
+        border.position.y = -14;
+        border.receiveShadow = true;
+        scene.add(border);
 
         // --- Agua (Río y Lago) ---
         const waterGeo = new THREE.PlaneGeometry(400, 400, 64, 64);
         const waterMat = new THREE.MeshStandardMaterial({ 
-            color: 0x0077be, transparent: true, opacity: 0.8, roughness: 0.1, metalness: 0.3 
+            color: 0x006994, transparent: true, opacity: 0.85, roughness: 0.1, metalness: 0.4 
         });
         const water = new THREE.Mesh(waterGeo, waterMat);
         water.rotation.x = -Math.PI / 2;
-        water.position.y = -2.5;
+        water.position.y = -1.5; // Ligeramente por debajo del borde plano (y=0)
         scene.add(water);
 
         // --- Generadores de Objetos ---
@@ -154,18 +179,18 @@
             const leaves = new THREE.ConeGeometry(1.2, 3, 6);
             leaves.translate(0, 2.5, 0);
             const treeGeo = mergeGeometries([trunk, leaves]);
-            // Colores más vibrantes tipo maqueta pintada
             const treeMat = new THREE.MeshStandardMaterial({ color: 0x2d5a27, flatShading: true });
-            const trees = new THREE.InstancedMesh(treeGeo, treeMat, 1000);
+            const trees = new THREE.InstancedMesh(treeGeo, treeMat, 1200);
             const dummy = new THREE.Object3D();
             let idx = 0;
-            for (let i = 0; i < 3000; i++) {
-                if (idx >= 1000) break;
-                const x = (Math.random() - 0.5) * 300;
-                const z = (Math.random() - 0.5) * 300;
+            for (let i = 0; i < 4000; i++) {
+                if (idx >= 1200) break;
+                const x = (Math.random() - 0.5) * 360;
+                const z = (Math.random() - 0.5) * 360;
                 const y = getHeight(x, z);
                 const riverX = x + Math.sin(z * 0.03) * 15;
-                if (Math.abs(riverX) < 20 || y < -1 || y > 35) continue;
+                // Solo generar donde hay relieve suficiente y no en el borde plano
+                if (Math.abs(riverX) < 22 || y < 0.5 || y > 35) continue;
                 
                 dummy.position.set(x, y, z);
                 const s = 0.8 + Math.random() * 0.6;
@@ -182,15 +207,15 @@
             const geo = new THREE.PlaneGeometry(0.3, 0.6);
             geo.translate(0, 0.3, 0);
             const mat = new THREE.MeshStandardMaterial({ color: 0x6b8e23, side: THREE.DoubleSide });
-            const grass = new THREE.InstancedMesh(geo, mat, 4000);
+            const grass = new THREE.InstancedMesh(geo, mat, 5000);
             const dummy = new THREE.Object3D();
             let idx = 0;
-            for (let i = 0; i < 8000; i++) {
-                if (idx >= 4000) break;
-                const x = (Math.random() - 0.5) * 250;
-                const z = (Math.random() - 0.5) * 250;
+            for (let i = 0; i < 10000; i++) {
+                if (idx >= 5000) break;
+                const x = (Math.random() - 0.5) * 360;
+                const z = (Math.random() - 0.5) * 360;
                 const y = getHeight(x, z);
-                if (y < -1 || y > 25) continue;
+                if (y < 0.5 || y > 30) continue; // No en el borde plano ni en el agua
                 dummy.position.set(x, y, z);
                 dummy.rotation.y = Math.random() * Math.PI;
                 dummy.rotation.z = (Math.random() - 0.5) * 0.5;
@@ -204,15 +229,15 @@
         function generateRocks() {
             const geo = new THREE.DodecahedronGeometry(1, 0);
             const mat = new THREE.MeshStandardMaterial({ color: 0x7a7a7a, flatShading: true });
-            const rocks = new THREE.InstancedMesh(geo, mat, 300);
+            const rocks = new THREE.InstancedMesh(geo, mat, 400);
             const dummy = new THREE.Object3D();
             let idx = 0;
-            for (let i = 0; i < 800; i++) {
-                if (idx >= 300) break;
-                const x = (Math.random() - 0.5) * 280;
-                const z = (Math.random() - 0.5) * 280;
+            for (let i = 0; i < 1000; i++) {
+                if (idx >= 400) break;
+                const x = (Math.random() - 0.5) * 360;
+                const z = (Math.random() - 0.5) * 360;
                 const y = getHeight(x, z);
-                if (y < -1) continue;
+                if (y < 1) continue;
                 dummy.position.set(x, y + 0.3, z);
                 const s = 0.4 + Math.random() * 1.2;
                 dummy.scale.set(s, s * 0.7, s);
@@ -240,14 +265,14 @@
         }
 
         function generateVillage() {
-            const locs = [{x: 25, z: 25}, {x: 32, z: 35}, {x: 18, z: 40}, {x: 40, z: 20}, {x: 20, z: 15}];
+            const locs = [{x: 35, z: 35}, {x: 45, z: 45}, {x: 25, z: 50}, {x: 50, z: 25}, {x: 30, z: 20}];
             locs.forEach(l => createHouse(l.x, l.z, Math.random() * Math.PI));
         }
 
         function generateTerraces() {
-            for (let i = 0; i < 40; i++) {
+            for (let i = 0; i < 50; i++) {
                 const angle = Math.random() * Math.PI * 2;
-                const radius = 70 + Math.random() * 70;
+                const radius = 60 + Math.random() * 80;
                 const x = Math.cos(angle) * radius;
                 const z = Math.sin(angle) * radius;
                 const h = getHeight(x, z);
@@ -261,6 +286,7 @@
                     mesh.position.set(x, h - 0.5, z);
                     mesh.rotation.y = Math.random() * Math.PI;
                     mesh.receiveShadow = true;
+                    mesh.castShadow = true;
                     scene.add(mesh);
                     if (Math.random() > 0.4) {
                         const crop = new THREE.Mesh(new THREE.BoxGeometry(w*0.8, 0.25, d*0.8), new THREE.MeshStandardMaterial({ color: 0x9acd32 }));
@@ -273,9 +299,12 @@
 
         function generatePath() {
             const points = [];
-            for (let z = 120; z > -120; z -= 4) {
+            for (let z = 130; z > -130; z -= 4) {
                 const x = Math.sin(z * 0.02) * 35;
-                points.push(new THREE.Vector3(x, getHeight(x, z) + 0.15, z));
+                const h = getHeight(x, z);
+                if (h > 0.5) { // Solo camino donde hay terreno
+                    points.push(new THREE.Vector3(x, h + 0.15, z));
+                }
             }
             for (let i = 0; i < points.length - 1; i++) {
                 const p1 = points[i], p2 = points[i+1];
@@ -334,28 +363,30 @@
         }
 
         function generateAnimals() {
-            for (let i = 0; i < 20; i++) {
-                const x = (Math.random() - 0.5) * 120;
-                const z = (Math.random() - 0.5) * 120;
+            for (let i = 0; i < 25; i++) {
+                const x = (Math.random() - 0.5) * 140;
+                const z = (Math.random() - 0.5) * 140;
                 const y = getHeight(x, z);
-                if (y > -1 && y < 20) {
+                if (y > 1 && y < 25) {
                     createLlama(x, z, Math.random() > 0.4 ? 0xffffff : 0x8b4513);
                 }
             }
         }
 
         function generateParcelas() {
-            for (let i = 0; i < 15; i++) {
-                const x = (Math.random() - 0.5) * 80;
-                const z = (Math.random() - 0.5) * 80;
+            for (let i = 0; i < 20; i++) {
+                const x = (Math.random() - 0.5) * 100;
+                const z = (Math.random() - 0.5) * 100;
                 const riverX = x + Math.sin(z * 0.03) * 15;
                 if (Math.abs(riverX) < 22) continue;
+                const h = getHeight(x, z);
+                if (h < 1) continue;
                 const w = 4 + Math.random() * 5, d = 4 + Math.random() * 5;
                 const geo = new THREE.BoxGeometry(w, 0.25, d);
                 const colors = [0x9acd32, 0x8fbc8f, 0xdaa520, 0x556b2f];
                 const mat = new THREE.MeshStandardMaterial({ color: colors[Math.floor(Math.random() * colors.length)] });
                 const mesh = new THREE.Mesh(geo, mat);
-                mesh.position.set(x, getHeight(x, z) + 0.15, z);
+                mesh.position.set(x, h + 0.15, z);
                 mesh.rotation.y = Math.random() * Math.PI;
                 mesh.receiveShadow = true;
                 scene.add(mesh);
@@ -364,7 +395,7 @@
 
         function createPuquial(x, z) {
             const y = getHeight(x, z);
-            const pool = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 0.6, 16), new THREE.MeshStandardMaterial({ color: 0x0077be }));
+            const pool = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 0.6, 16), new THREE.MeshStandardMaterial({ color: 0x006994 }));
             pool.position.set(x, y + 0.3, z);
             scene.add(pool);
             
@@ -388,13 +419,13 @@
             const p2 = createPuquial(-50, 80);
             
             const len1 = 50;
-            const c1 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.6, len1), new THREE.MeshStandardMaterial({ color: 0x0077be }));
+            const c1 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.6, len1), new THREE.MeshStandardMaterial({ color: 0x006994 }));
             c1.position.set(p1.x, p1.y - 0.3, p1.z - len1/2);
             c1.rotation.x = 0.08;
             scene.add(c1);
             
             const len2 = 60;
-            const c2 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.6, len2), new THREE.MeshStandardMaterial({ color: 0x0077be }));
+            const c2 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.6, len2), new THREE.MeshStandardMaterial({ color: 0x006994 }));
             c2.position.set(p2.x, p2.y - 0.3, p2.z - len2/2);
             c2.rotation.x = 0.08;
             c2.rotation.y = 0.3;
@@ -403,14 +434,17 @@
 
         let waterfall, velArray;
         function createWaterfall() {
-            const count = 2000;
+            const count = 1500;
             const geo = new THREE.BufferGeometry();
             const positions = new Float32Array(count * 3);
             velArray = new Float32Array(count * 3);
             for (let i = 0; i < count; i++) {
-                const z = 50 + (Math.random() - 0.5) * 5;
+                const z = 60 + (Math.random() - 0.5) * 5;
                 const x = Math.sin(z * 0.03) * 15 + (Math.random() - 0.5) * 4;
-                const y = 2 - Math.random() * 18;
+                const h = getHeight(x, z);
+                // La cascada cae desde el borde del río elevado
+                const startY = h > 5 ? h : 5; 
+                const y = startY - Math.random() * 15;
                 positions[i*3] = x; positions[i*3+1] = y; positions[i*3+2] = z;
                 velArray[i*3+1] = -0.4 - Math.random() * 0.5;
             }
@@ -426,40 +460,40 @@
         generateVillage();
         generateTerraces();
         generatePath();
-        createObservatory(0, -80);
+        createObservatory(0, -90);
         generateAnimals();
         generateParcelas();
         generateCanalsAndPuquiales();
         createWaterfall();
 
-        // --- Controles de Maqueta (Orbit) ---
+        // --- Controles de Maqueta ---
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        controls.maxPolarAngle = Math.PI / 2.1; // Evitar que la cámara pase bajo el suelo
-        controls.minDistance = 30;
-        controls.maxDistance = 250;
-        controls.target.set(0, 0, 0);
+        controls.maxPolarAngle = Math.PI / 2.15; // No permitir ver por debajo de la base
+        controls.minDistance = 40;
+        controls.maxDistance = 300;
+        controls.target.set(0, 5, 0);
 
         const blocker = document.getElementById('blocker');
         const uiHint = document.getElementById('ui-hint');
         
-        let isInteracting = false;
         blocker.addEventListener('click', () => {
             blocker.style.opacity = '0';
-            setTimeout(() => { blocker.style.display = 'none'; }, 300);
+            setTimeout(() => { blocker.style.display = 'none'; }, 400);
             uiHint.style.display = 'block';
             initAudio();
         });
 
-        // --- Audio Procedural (Web Audio API) ---
+        // --- Audio Procedural ---
         let audioCtx;
         function initAudio() {
             if (audioCtx) return;
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             
-            // Viento
             const bufferSize = 2 * audioCtx.sampleRate;
+            
+            // Viento
             const windBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const windData = windBuffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) windData[i] = Math.random() * 2 - 1;
@@ -468,7 +502,7 @@
             const windFilter = audioCtx.createBiquadFilter();
             windFilter.type = 'lowpass'; windFilter.frequency.value = 400;
             const windGain = audioCtx.createGain();
-            windGain.gain.value = 0.03;
+            windGain.gain.value = 0.025;
             windNoise.connect(windFilter); windFilter.connect(windGain); windGain.connect(audioCtx.destination);
             windNoise.start();
 
@@ -481,7 +515,7 @@
             const riverFilter = audioCtx.createBiquadFilter();
             riverFilter.type = 'bandpass'; riverFilter.frequency.value = 300;
             const riverGain = audioCtx.createGain();
-            riverGain.gain.value = 0.05;
+            riverGain.gain.value = 0.04;
             riverNoise.connect(riverFilter); riverFilter.connect(riverGain); riverGain.connect(audioCtx.destination);
             riverNoise.start();
 
@@ -515,7 +549,7 @@
             for (let i = 0; i < wPos.count; i++) {
                 const lx = wPos.getX(i);
                 const ly = wPos.getY(i);
-                const wave = Math.sin(lx * 0.15 + time * 1.5) * 0.15 + Math.cos(ly * 0.15 + time) * 0.15;
+                const wave = Math.sin(lx * 0.15 + time * 1.5) * 0.12 + Math.cos(ly * 0.15 + time) * 0.12;
                 wPos.setZ(i, wave);
             }
             wPos.needsUpdate = true;
@@ -525,10 +559,12 @@
                 const pos = waterfall.geometry.attributes.position.array;
                 for (let i = 0; i < pos.length / 3; i++) {
                     pos[i*3+1] += velArray[i*3+1];
-                    if (pos[i*3+1] < -12) {
-                        pos[i*3+1] = 2;
-                        const z = 50 + (Math.random() - 0.5) * 5;
-                        pos[i*3] = Math.sin(z * 0.03) * 15 + (Math.random() - 0.5) * 4;
+                    if (pos[i*3+1] < -10) {
+                        pos[i*3+1] = 5; // Reiniciar arriba
+                        const z = 60 + (Math.random() - 0.5) * 5;
+                        const x = Math.sin(z * 0.03) * 15 + (Math.random() - 0.5) * 4;
+                        const h = getHeight(x, z);
+                        pos[i*3] = x;
                         pos[i*3+2] = z;
                     }
                 }
@@ -546,7 +582,7 @@
                 pos.needsUpdate = true;
             });
 
-            // Animación de llamas (respiración)
+            // Animación de llamas
             llamas.forEach(llama => {
                 llama.position.y = llama.userData.baseY + Math.abs(Math.sin(time * 1.5 + llama.userData.id)) * 0.1;
                 llama.rotation.y += Math.sin(time * 0.5 + llama.userData.id) * 0.003;
@@ -558,7 +594,7 @@
 
         window.addEventListener('resize', () => {
             const aspect = window.innerWidth / window.innerHeight;
-            const d = 120;
+            const d = 130;
             camera.left = -d * aspect;
             camera.right = d * aspect;
             camera.top = d;
