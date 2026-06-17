@@ -7,7 +7,7 @@
     <style>
         body { margin: 0; overflow: hidden; background-color: #111; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         #blocker {
-            position: absolute; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);
+            position: absolute; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             color: white; z-index: 10; cursor: pointer; transition: opacity 0.4s;
         }
@@ -30,7 +30,7 @@
             <p>✋ <strong>Mover:</strong> Click derecho + Arrastrar</p>
         </div>
     </div>
-    <div id="ui-hint">MAQUETA DE RELIEVE • TRES.JS</div>
+    <div id="ui-hint">MAQUETA DE RELIEVE RECTANGULAR • THREE.JS</div>
 
     <script type="importmap">
         {
@@ -53,9 +53,9 @@
 
         // Cámara ortográfica para efecto diorama/maqueta
         const aspect = window.innerWidth / window.innerHeight;
-        const d = 130;
+        const d = 140;
         const camera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 1000);
-        camera.position.set(120, 140, 120); // Ángulo isométrico elevado
+        camera.position.set(130, 150, 130);
         camera.lookAt(0, 5, 0);
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -85,19 +85,29 @@
         fillLight.position.set(-80, 50, -80);
         scene.add(fillLight);
 
-        // --- Función de Terreno (RELIEVE CONTENIDO, BORDES PLANOS) ---
+        // --- Función de Terreno (RELIEVE RECTANGULAR ESTRICTO) ---
         function getHeight(x, z) {
-            let y = 0;
-            const dist = Math.sqrt(x * x + z * z);
-            const maxDist = 180; // Límite del relieve
+            const limitX = 190;
+            const limitZ = 190;
             
-            // Factor de suavizado: 1 en el centro, 0 en los bordes (evita que "vuele")
-            const edgeFactor = Math.max(0, 1 - (dist / maxDist));
-            const smoothEdge = edgeFactor * edgeFactor * (3 - 2 * edgeFactor); // Smoothstep
+            // Fuera de los límites rectangulares: altura 0 absoluta (plano perfecto)
+            if (Math.abs(x) > limitX || Math.abs(z) > limitZ) {
+                return 0;
+            }
+
+            // Factores de suavizado independientes para X y Z (crea un rectángulo, no un círculo)
+            const tX = Math.max(0, Math.min(1, 1 - Math.abs(x) / limitX));
+            const smoothX = tX * tX * (3 - 2 * tX); // Smoothstep
+            
+            const tZ = Math.max(0, Math.min(1, 1 - Math.abs(z) / limitZ));
+            const smoothZ = tZ * tZ * (3 - 2 * tZ); // Smoothstep
+            
+            // La multiplicación asegura que si estás cerca de CUALQUIER borde, la altura baje a 0
+            const smoothEdge = smoothX * smoothZ;
 
             // Relieve interno (Montañas y colinas)
             let internalHeight = Math.sin(x * 0.015) * 18 + Math.cos(z * 0.015) * 18;
-            internalHeight += Math.sin(x * 0.04 + z * 0.02) * 5; // Detalle
+            internalHeight += Math.sin(x * 0.04 + z * 0.02) * 5;
 
             // Valle del río
             const riverX = x + Math.sin(z * 0.03) * 15;
@@ -111,11 +121,11 @@
                 internalHeight = -2;
             }
 
-            // Aplicar el suavizado de bordes para que sea plano en el perímetro
-            y = internalHeight * smoothEdge;
+            // Aplicar el suavizado rectangular
+            let y = internalHeight * smoothEdge;
 
-            // Asegurar que el borde absoluto sea perfectamente plano (y = 0)
-            if (dist > maxDist - 2) {
+            // Forzar plano absoluto en los últimos 2 unidades del borde
+            if (Math.abs(x) > limitX - 2 || Math.abs(z) > limitZ - 2) {
                 y = 0;
             }
 
@@ -141,9 +151,9 @@
         terrain.castShadow = true;
         scene.add(terrain);
 
-        // --- BASE DE LA MAQUETA (Tabla sólida) ---
-        // Base principal
-        const baseGeo = new THREE.BoxGeometry(410, 12, 410);
+        // --- BASE DE LA MAQUETA (Tabla rectangular sólida) ---
+        // Base principal (400x400, coincide con los límites del terreno)
+        const baseGeo = new THREE.BoxGeometry(400, 12, 400);
         const baseMat = new THREE.MeshStandardMaterial({ color: 0x4E342E, roughness: 0.9, metalness: 0.1 });
         const base = new THREE.Mesh(baseGeo, baseMat);
         base.position.y = -6;
@@ -151,8 +161,8 @@
         base.castShadow = true;
         scene.add(base);
 
-        // Borde decorativo inferior
-        const borderGeo = new THREE.BoxGeometry(420, 8, 420);
+        // Borde decorativo inferior (ligeramente más ancho)
+        const borderGeo = new THREE.BoxGeometry(410, 8, 410);
         const borderMat = new THREE.MeshStandardMaterial({ color: 0x3E2723, roughness: 0.95 });
         const border = new THREE.Mesh(borderGeo, borderMat);
         border.position.y = -14;
@@ -160,13 +170,14 @@
         scene.add(border);
 
         // --- Agua (Río y Lago) ---
-        const waterGeo = new THREE.PlaneGeometry(400, 400, 64, 64);
+        // Reducido a 380x380 para que NO toque el borde plano de la base (evita efecto "derrame")
+        const waterGeo = new THREE.PlaneGeometry(380, 380, 64, 64);
         const waterMat = new THREE.MeshStandardMaterial({ 
             color: 0x006994, transparent: true, opacity: 0.85, roughness: 0.1, metalness: 0.4 
         });
         const water = new THREE.Mesh(waterGeo, waterMat);
         water.rotation.x = -Math.PI / 2;
-        water.position.y = -1.5; // Ligeramente por debajo del borde plano (y=0)
+        water.position.y = -1.5;
         scene.add(water);
 
         // --- Generadores de Objetos ---
@@ -187,9 +198,12 @@
                 if (idx >= 1200) break;
                 const x = (Math.random() - 0.5) * 360;
                 const z = (Math.random() - 0.5) * 360;
+                
+                // No generar en el borde plano rectangular
+                if (Math.abs(x) > 175 || Math.abs(z) > 175) continue;
+                
                 const y = getHeight(x, z);
                 const riverX = x + Math.sin(z * 0.03) * 15;
-                // Solo generar donde hay relieve suficiente y no en el borde plano
                 if (Math.abs(riverX) < 22 || y < 0.5 || y > 35) continue;
                 
                 dummy.position.set(x, y, z);
@@ -214,8 +228,11 @@
                 if (idx >= 5000) break;
                 const x = (Math.random() - 0.5) * 360;
                 const z = (Math.random() - 0.5) * 360;
+                
+                if (Math.abs(x) > 175 || Math.abs(z) > 175) continue;
+                
                 const y = getHeight(x, z);
-                if (y < 0.5 || y > 30) continue; // No en el borde plano ni en el agua
+                if (y < 0.5 || y > 30) continue;
                 dummy.position.set(x, y, z);
                 dummy.rotation.y = Math.random() * Math.PI;
                 dummy.rotation.z = (Math.random() - 0.5) * 0.5;
@@ -236,6 +253,9 @@
                 if (idx >= 400) break;
                 const x = (Math.random() - 0.5) * 360;
                 const z = (Math.random() - 0.5) * 360;
+                
+                if (Math.abs(x) > 175 || Math.abs(z) > 175) continue;
+                
                 const y = getHeight(x, z);
                 if (y < 1) continue;
                 dummy.position.set(x, y + 0.3, z);
@@ -275,6 +295,9 @@
                 const radius = 60 + Math.random() * 80;
                 const x = Math.cos(angle) * radius;
                 const z = Math.sin(angle) * radius;
+                
+                if (Math.abs(x) > 170 || Math.abs(z) > 170) continue;
+                
                 const h = getHeight(x, z);
                 if (h > 8 && h < 30) {
                     const w = 5 + Math.random() * 6;
@@ -299,11 +322,13 @@
 
         function generatePath() {
             const points = [];
-            for (let z = 130; z > -130; z -= 4) {
+            for (let z = 140; z > -140; z -= 4) {
                 const x = Math.sin(z * 0.02) * 35;
-                const h = getHeight(x, z);
-                if (h > 0.5) { // Solo camino donde hay terreno
-                    points.push(new THREE.Vector3(x, h + 0.15, z));
+                if (Math.abs(x) < 170) {
+                    const h = getHeight(x, z);
+                    if (h > 0.5) {
+                        points.push(new THREE.Vector3(x, h + 0.15, z));
+                    }
                 }
             }
             for (let i = 0; i < points.length - 1; i++) {
@@ -366,6 +391,7 @@
             for (let i = 0; i < 25; i++) {
                 const x = (Math.random() - 0.5) * 140;
                 const z = (Math.random() - 0.5) * 140;
+                if (Math.abs(x) > 160 || Math.abs(z) > 160) continue;
                 const y = getHeight(x, z);
                 if (y > 1 && y < 25) {
                     createLlama(x, z, Math.random() > 0.4 ? 0xffffff : 0x8b4513);
@@ -377,6 +403,7 @@
             for (let i = 0; i < 20; i++) {
                 const x = (Math.random() - 0.5) * 100;
                 const z = (Math.random() - 0.5) * 100;
+                if (Math.abs(x) > 160 || Math.abs(z) > 160) continue;
                 const riverX = x + Math.sin(z * 0.03) * 15;
                 if (Math.abs(riverX) < 22) continue;
                 const h = getHeight(x, z);
@@ -442,7 +469,6 @@
                 const z = 60 + (Math.random() - 0.5) * 5;
                 const x = Math.sin(z * 0.03) * 15 + (Math.random() - 0.5) * 4;
                 const h = getHeight(x, z);
-                // La cascada cae desde el borde del río elevado
                 const startY = h > 5 ? h : 5; 
                 const y = startY - Math.random() * 15;
                 positions[i*3] = x; positions[i*3+1] = y; positions[i*3+2] = z;
@@ -470,7 +496,7 @@
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
-        controls.maxPolarAngle = Math.PI / 2.15; // No permitir ver por debajo de la base
+        controls.maxPolarAngle = Math.PI / 2.15;
         controls.minDistance = 40;
         controls.maxDistance = 300;
         controls.target.set(0, 5, 0);
@@ -493,7 +519,6 @@
             
             const bufferSize = 2 * audioCtx.sampleRate;
             
-            // Viento
             const windBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const windData = windBuffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) windData[i] = Math.random() * 2 - 1;
@@ -506,7 +531,6 @@
             windNoise.connect(windFilter); windFilter.connect(windGain); windGain.connect(audioCtx.destination);
             windNoise.start();
 
-            // Río
             const riverBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const riverData = riverBuffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) riverData[i] = Math.random() * 2 - 1;
@@ -519,7 +543,6 @@
             riverNoise.connect(riverFilter); riverFilter.connect(riverGain); riverGain.connect(audioCtx.destination);
             riverNoise.start();
 
-            // Pájaros
             function chirp() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
@@ -544,7 +567,6 @@
             const delta = clock.getDelta();
             const time = clock.getElapsedTime();
 
-            // Animación del agua
             const wPos = water.geometry.attributes.position;
             for (let i = 0; i < wPos.count; i++) {
                 const lx = wPos.getX(i);
@@ -554,16 +576,14 @@
             }
             wPos.needsUpdate = true;
 
-            // Animación de la cascada
             if (waterfall) {
                 const pos = waterfall.geometry.attributes.position.array;
                 for (let i = 0; i < pos.length / 3; i++) {
                     pos[i*3+1] += velArray[i*3+1];
                     if (pos[i*3+1] < -10) {
-                        pos[i*3+1] = 5; // Reiniciar arriba
+                        pos[i*3+1] = 5;
                         const z = 60 + (Math.random() - 0.5) * 5;
                         const x = Math.sin(z * 0.03) * 15 + (Math.random() - 0.5) * 4;
-                        const h = getHeight(x, z);
                         pos[i*3] = x;
                         pos[i*3+2] = z;
                     }
@@ -571,7 +591,6 @@
                 waterfall.geometry.attributes.position.needsUpdate = true;
             }
 
-            // Animación de burbujas
             bubblesList.forEach(b => {
                 const pos = b.geometry.attributes.position;
                 for (let i = 0; i < pos.count; i++) {
@@ -582,7 +601,6 @@
                 pos.needsUpdate = true;
             });
 
-            // Animación de llamas
             llamas.forEach(llama => {
                 llama.position.y = llama.userData.baseY + Math.abs(Math.sin(time * 1.5 + llama.userData.id)) * 0.1;
                 llama.rotation.y += Math.sin(time * 0.5 + llama.userData.id) * 0.003;
@@ -594,7 +612,7 @@
 
         window.addEventListener('resize', () => {
             const aspect = window.innerWidth / window.innerHeight;
-            const d = 130;
+            const d = 140;
             camera.left = -d * aspect;
             camera.right = d * aspect;
             camera.top = d;
